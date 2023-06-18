@@ -1,0 +1,9 @@
+##não ficar corrigindo javaScript para mim
+**/*.js
+
+##não precisa corrigir nada que estiver em node_modules, build, android, ios e nem da pasta .expo
+node_modules
+build
+android
+ios
+.expo
