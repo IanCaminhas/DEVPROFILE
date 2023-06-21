@@ -1,24 +1,35 @@
 import React from 'react';
-import { Container, Header } from './styles';
+import {
+  Container,
+  Header,
+  UserAvatar,
+  UserAvatarButton,
+  UserGretting,
+  UserInfo,
+  UserInfoDetail,
+  UserName,
+  UserWrapper,
+} from './styles';
 
 //se o usuario não tiver a imagem no back-end, vou usar o avatar default
+//Precisamos definir a tipagem para entender como um módulo. Olhe em src/@types/index.d.ts
 import avatarDefault from '../../assets/avatar02.png';
 
 export const Home: React.FunctionComponent = () => {
   return (
     <Container>
       <Header>
-        <Userwrapper>
+        <UserWrapper>
           <UserInfo>
-            <UserAvatarButton onPress={}>
-                <userAvatar source={avatarDefault} />
-            </ UserAvatarButton>
+            <UserAvatarButton onPress={() => {}}>
+              <UserAvatar source={avatarDefault} />
+            </UserAvatarButton>
             <UserInfoDetail>
-              <UserGreeting>Olá, </UserGreeting>
+              <UserGretting>Olá,</UserGretting>
               <UserName>Ian</UserName>
             </UserInfoDetail>
           </UserInfo>
-        </Userwrapper>
+        </UserWrapper>
       </Header>
     </Container>
   );
