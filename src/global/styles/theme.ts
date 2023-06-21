@@ -14,4 +14,9 @@ export default {
     gray500: 'a8a8b3',
     gray800: '#29292e',
   },
+  //Agora estou preparado para usar as fontes em qualquer componente. Como já carreguei elas em App.tsx
+  fonts: {
+    regular: 'Roboto_400Regular',
+    bold: 'Roboto_700Bold',
+  },
 };
