@@ -3,6 +3,7 @@ Se fosse styled-components web seria 'styled-components
 */
 import styled from 'styled-components/native';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import { Feather } from '@expo/vector-icons';
 
 /*estou criando um componente dizendo que ele é igual a uma View. Mas essa View é estilizada pelo styled-components
 No final das contas, um componente vai ser criado
@@ -71,10 +72,13 @@ export const Header = styled.View`
   flex-direction: row;
   margin-top: ${RFValue(28)}px;
 `;
-
+// space entre os elementos: justify-content: space-between;
 export const UserWrapper = styled.View`
   width: 100%;
   padding: 0 24px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export const UserInfo = styled.View`
@@ -105,4 +109,11 @@ export const UserName = styled.Text`
   font-family: ${({ theme }) => theme.fonts.bold};
   font-weight: bold;
   color: ${({ theme }) => theme.colors.gray800};
+`;
+
+//alguns componentes devem ser passados assim para o styled() components
+//Não consigo capturar pelo ponto como os principais componentes do react-native
+export const Icon = styled(Feather)`
+  font-size: ${RFValue(28)}px;
+  color: ${({ theme }) => theme.colors.dark};
 `;
