@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Home } from './src/pages/Home';
 import { ThemeProvider } from 'styled-components';
 import theme from './src/global/styles/theme';
@@ -7,7 +7,7 @@ import {
   Roboto_400Regular,
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
-import AppLoading from 'expo-app-loading';
+import * as SplashScreen from 'expo-splash-screen';
 
 const App: React.FunctionComponent = () => {
   //Aqui já tenho as duas fontes disponíveis para trabalhar no projeto
@@ -17,9 +17,14 @@ const App: React.FunctionComponent = () => {
     Roboto_700Bold,
   });
   //A tela de splash screen vai ficar mantida enquanto as fontes não forem carregadas. Retorna esse componente até as fontes serem carregadas
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      // This tells the splash screen to hide immediately
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
 
   //antes de retornar toda a aplicação, preciso carregar as fontes referentes às instruções acima
   return (
