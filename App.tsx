@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { Home } from './src/pages/Home';
 import { ThemeProvider } from 'styled-components';
 import theme from './src/global/styles/theme';
 import {
@@ -8,6 +7,7 @@ import {
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
 import * as SplashScreen from 'expo-splash-screen';
+import { SignIn } from './src/pages/SignIn';
 
 const App: React.FunctionComponent = () => {
   //Aqui já tenho as duas fontes disponíveis para trabalhar no projeto
@@ -29,7 +29,7 @@ const App: React.FunctionComponent = () => {
   //antes de retornar toda a aplicação, preciso carregar as fontes referentes às instruções acima
   return (
     <ThemeProvider theme={theme}>
-      <Home />
+      <SignIn />
     </ThemeProvider>
   );
 };

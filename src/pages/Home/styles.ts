@@ -65,7 +65,7 @@ A bib faz a conta e ocupa a área pra gente.
 */
 export const Header = styled.View`
   width: 100%;
-  height: ${RFPercentage(17)}px;
+  height: ${RFPercentage(12)}px;
   background-color: ${({ theme }) => theme.colors.secondary};
   justify-content: center;
   align-items: center;
