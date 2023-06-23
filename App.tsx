@@ -8,6 +8,7 @@ import {
 } from '@expo-google-fonts/roboto';
 import * as SplashScreen from 'expo-splash-screen';
 import { SignIn } from './src/pages/SignIn';
+import { SignUp } from './src/pages/SignUp';
 
 const App: React.FunctionComponent = () => {
   //Aqui já tenho as duas fontes disponíveis para trabalhar no projeto
@@ -29,7 +30,7 @@ const App: React.FunctionComponent = () => {
   //antes de retornar toda a aplicação, preciso carregar as fontes referentes às instruções acima
   return (
     <ThemeProvider theme={theme}>
-      <SignIn />
+      <SignUp />
     </ThemeProvider>
   );
 };
