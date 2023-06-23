@@ -20,7 +20,7 @@ export const Button: React.FunctionComponent<ButtonProps> = ({
 }) => {
   return (
     <Container {...otherProps}>
-      <Title>{Title}</Title>
+      <Title>{title}</Title>
     </Container>
   );
 };
