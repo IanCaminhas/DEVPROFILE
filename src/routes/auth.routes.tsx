@@ -7,13 +7,23 @@ import { SignUp } from '../pages/SignUp';
 //As rotas desse objeto não exigem autenticação,ou seja, são as rotas abertas
 const Auth = createNativeStackNavigator();
 
+/*
+  Para cada tela usada no Navigator, vou usar o Stack.Screen.
+  Screen já traz uma estilização. Posso mudar essa estilização.
+  Posso tirar o header usando o objeto { headerShown: false }
+
+  Tem como configurar o Auth.Navigator para ele carregar a
+  página primária, ou seja, a primeira página a ser carregada.
+  Uso a propriedade initialRouteName. Essa propriedade recebe o nome da página
+*/
 export const AuthRoutes: React.FunctionComponent = () => {
   return (
-    <Auth.Navigator>
+    <Auth.Navigator
+      initialRouteName="SignIn"
+      screenOptions={{ headerShown: false }}
+    >
       <Auth.Screen name="SignIn" component={SignIn} />
       <Auth.Screen name="SignUp" component={SignUp} />
     </Auth.Navigator>
   );
 };
-
-//arquivo será responsável por liberar as rotas privadas ou as abertas. Isso vai ocorrer se o usuário está autenticado ou não

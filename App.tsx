@@ -7,7 +7,7 @@ import {
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto';
 import * as SplashScreen from 'expo-splash-screen';
-import { SignUp } from './src/pages/SignUp';
+import { Routes } from './src/routes';
 import { NavigationContainer } from '@react-navigation/native';
 
 const App: React.FunctionComponent = () => {
@@ -31,7 +31,7 @@ const App: React.FunctionComponent = () => {
   return (
     <NavigationContainer>
       <ThemeProvider theme={theme}>
-        <SignUp />
+        <Routes />
       </ThemeProvider>
     </NavigationContainer>
   );
