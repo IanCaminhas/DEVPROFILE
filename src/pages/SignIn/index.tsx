@@ -6,9 +6,12 @@ import {
   Logo,
   ForgotPasswordButton,
   ForgotPasswordTitle,
+  CreateAccount,
+  CreateAccountTitle,
+  Icon,
 } from './styles';
 import { Input } from '../../components/Form/Input';
-import { ScrollView } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { Button } from '../../components/Form/Button';
 import logo from '../../assets/logo.png';
 
@@ -22,25 +25,46 @@ keyboardShouldPersistTaps="handled":
   contentContainerStyle={{ flex: 1 }} estilização inline... para o scrollview ocupar toda a tela
   {{}} -> primeiras chaves: código javaScript/ segunda chave: é um objeto
 
+  KeyboardAvoidingView -> quando o app é rodado no IOs e o teclado está aberto,
+  a rolagem não ocorre. behavior Será aplicado nas plataformas android e IOs.
+  behavior -> qual comportamento será aplicado ?
+  <KeyboardAvoidingView
+      enabled
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+  Se for ios, empurre a página com 'padding'... Se for outra plataforma, undefined(não precisa fazer nada).
 */
 export const SignIn: React.FunctionComponent = () => {
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{ flex: 1 }}
+    <KeyboardAvoidingView
+      enabled
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <Container>
-        <Content>
-          <Logo source={logo} />
-          <Title>Faça seu login</Title>
-          <Input placeholder="Email" />
-          <Input placeholder="Senha" />
-          <Button title="Entrar" />
-          <ForgotPasswordButton>
-            <ForgotPasswordTitle>Esqueci minha senha</ForgotPasswordTitle>
-          </ForgotPasswordButton>
-        </Content>
-      </Container>
-    </ScrollView>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flex: 1 }}
+      >
+        <Container>
+          <Content>
+            <Logo source={logo} />
+            <View>
+              <Title>Faça seu login</Title>
+            </View>
+            <Input placeholder="Email" />
+            <Input placeholder="Senha" />
+            <Button title="Entrar" />
+            <ForgotPasswordButton>
+              <ForgotPasswordTitle>Esqueci minha senha</ForgotPasswordTitle>
+            </ForgotPasswordButton>
+          </Content>
+        </Container>
+      </ScrollView>
+      <CreateAccount>
+        <Icon name="log-in" />
+        <CreateAccountTitle>Criar uma conta</CreateAccountTitle>
+      </CreateAccount>
+    </KeyboardAvoidingView>
   );
 };
