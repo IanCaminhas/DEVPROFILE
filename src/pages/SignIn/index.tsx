@@ -14,6 +14,12 @@ import { Input } from '../../components/Form/Input';
 import { ScrollView, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { Button } from '../../components/Form/Button';
 import logo from '../../assets/logo.png';
+import { useNavigation } from '@react-navigation/native';
+
+//Estou defindo o tipo que vou usar no const navigation = useNavigation();
+interface ScreenNavigationProp {
+  navigate: (screen: string) => void;
+}
 
 /*
 Quando o usuario usa o teclado do celular, a página pode fica encurtada.
@@ -36,6 +42,13 @@ keyboardShouldPersistTaps="handled":
   Se for ios, empurre a página com 'padding'... Se for outra plataforma, undefined(não precisa fazer nada).
 */
 export const SignIn: React.FunctionComponent = () => {
+  /*
+    vai para a página específica. Recebe o nome da tela que quero navegar
+    navigation.navigate().
+  */
+
+  const navigation = useNavigation<ScreenNavigationProp>();
+
   return (
     <KeyboardAvoidingView
       enabled
@@ -61,7 +74,11 @@ export const SignIn: React.FunctionComponent = () => {
           </Content>
         </Container>
       </ScrollView>
-      <CreateAccount>
+      <CreateAccount
+        onPress={() => {
+          navigation.navigate('SignUp');
+        }}
+      >
         <Icon name="log-in" />
         <CreateAccountTitle>Criar uma conta</CreateAccountTitle>
       </CreateAccount>
