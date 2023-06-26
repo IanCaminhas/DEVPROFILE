@@ -77,7 +77,7 @@ export const SignIn: React.FunctionComponent = () => {
       email: form.email,
       password: form.passowrd,
     };
-    //console.log(data); para receber no terminal
+    console.log(data);
   };
 
   return (
