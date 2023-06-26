@@ -10,15 +10,30 @@ import {
   CreateAccountTitle,
   Icon,
 } from './styles';
-import { Input } from '../../components/Form/Input';
 import { ScrollView, KeyboardAvoidingView, Platform, View } from 'react-native';
 import { Button } from '../../components/Form/Button';
 import logo from '../../assets/logo.png';
 import { useNavigation } from '@react-navigation/native';
+import { useForm, FieldValues } from 'react-hook-form';
+import { InputControl } from '../../components/Form/InputControl';
 
 //Estou defindo o tipo que vou usar no const navigation = useNavigation();
 interface ScreenNavigationProp {
   navigate: (screen: string) => void;
+}
+
+//tipo para definir quais informações tenho em cada input do react-hook-form
+//essa tipagen aqui agora é genérica, ou seja, não posso especificar cada campo mais
+interface IFormInputs {
+  /*
+  email: string;
+  passowrd: string;
+  */
+  //O eslint não gosta de any. Tenho como ignorar essa linha amarela abaixo
+  //quando ocorrer isso, vai no arquivo do eslintrc.json copiando e colando em rules.
+  //Passe o mouse a cima do código com a linha amarela e copia o warn que está assim eslint(@typescript-eslint/no-explicit-any)
+  //Resolvi a tipagem
+  [name: string]: any;
 }
 
 /*
@@ -40,14 +55,30 @@ keyboardShouldPersistTaps="handled":
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
   Se for ios, empurre a página com 'padding'... Se for outra plataforma, undefined(não precisa fazer nada).
+
+  Antes estava usando o:
+  <Input placeholder="Email" />
+  <Input placeholder="Senha" />
+
+  Eu tinha feito esse input. Agora estou usando o InputControl
 */
 export const SignIn: React.FunctionComponent = () => {
+  //conrola a submissão dos dados do formulário: handleSubmit
+  const { handleSubmit, control } = useForm<FieldValues>();
   /*
     vai para a página específica. Recebe o nome da tela que quero navegar
     navigation.navigate().
   */
-
   const navigation = useNavigation<ScreenNavigationProp>();
+
+  //Essa função cria um objeto com as informações recebidas do formulário
+  const handleSignIn = (form: IFormInputs) => {
+    const data = {
+      email: form.email,
+      password: form.passowrd,
+    };
+    //console.log(data); para receber no terminal
+  };
 
   return (
     <KeyboardAvoidingView
@@ -65,9 +96,23 @@ export const SignIn: React.FunctionComponent = () => {
             <View>
               <Title>Faça seu login</Title>
             </View>
-            <Input placeholder="Email" />
-            <Input placeholder="Senha" />
-            <Button title="Entrar" />
+            <InputControl
+              autoCapitalize="none"
+              autoCorrect={false}
+              control={control}
+              name="email"
+              placeholder="Email"
+              keyboardType="email-address"
+            />
+            <InputControl
+              autoCapitalize="none"
+              autoCorrect={false}
+              control={control}
+              name="password"
+              placeholder="Senha"
+              secureTextEntry
+            />
+            <Button title="Entrar" onPress={() => handleSubmit(handleSignIn)} />
             <ForgotPasswordButton>
               <ForgotPasswordTitle>Esqueci minha senha</ForgotPasswordTitle>
             </ForgotPasswordButton>
