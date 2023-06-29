@@ -9,7 +9,7 @@ import {
 import * as SplashScreen from 'expo-splash-screen';
 import { Routes } from './src/routes';
 import { NavigationContainer } from '@react-navigation/native';
-import { AuthContext } from './src/pages/context/AuthContext';
+import { AuthProvider } from './src/pages/context/AuthContext';
 
 const App: React.FunctionComponent = () => {
   //Aqui já tenho as duas fontes disponíveis para trabalhar no projeto
@@ -33,9 +33,9 @@ const App: React.FunctionComponent = () => {
   return (
     <NavigationContainer>
       <ThemeProvider theme={theme}>
-        <AuthContext.Provider value={{ name: 'Ian' }}>
+        <AuthProvider>
           <Routes />
-        </AuthContext.Provider>
+        </AuthProvider>
       </ThemeProvider>
     </NavigationContainer>
   );
