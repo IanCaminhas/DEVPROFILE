@@ -16,6 +16,8 @@ import logo from '../../assets/logo.png';
 import { useNavigation } from '@react-navigation/native';
 import { useForm, FieldValues } from 'react-hook-form';
 import { InputControl } from '../../components/Form/InputControl';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 //Estou defindo o tipo que vou usar no const navigation = useNavigation();
 interface ScreenNavigationProp {
@@ -35,6 +37,11 @@ interface IFormInputs {
   //Resolvi a tipagem
   [name: string]: any;
 }
+//dentro de cada validação, posso passar uma mensagem. É opcional
+const formSchema = yup.object({
+  email: yup.string().email('Email inválido.').required('Informe o email.'),
+  password: yup.string().required('Informe a senha.'),
+});
 
 /*
 Quando o usuario usa o teclado do celular, a página pode fica encurtada.
@@ -64,7 +71,14 @@ keyboardShouldPersistTaps="handled":
 */
 export const SignIn: React.FunctionComponent = () => {
   //conrola a submissão dos dados do formulário: handleSubmit
-  const { handleSubmit, control } = useForm<FieldValues>();
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    //Estou dizendo para o react hook form que ele vai trabalhar com esse tipo de validação
+    resolver: yupResolver(formSchema),
+  });
   /*
     vai para a página específica. Recebe o nome da tela que quero navegar
     navigation.navigate().
@@ -103,14 +117,15 @@ export const SignIn: React.FunctionComponent = () => {
               name="email"
               placeholder="Email"
               keyboardType="email-address"
+              error={errors.email && (errors.email.message as string)}
             />
             <InputControl
-              autoCapitalize="none"
-              autoCorrect={false}
               control={control}
               name="password"
               placeholder="Senha"
+              autoCorrect={false}
               secureTextEntry
+              error={errors.password && (errors.password.message as string)}
             />
             <Button title="Entrar" onPress={() => handleSubmit(handleSignIn)} />
             <ForgotPasswordButton>

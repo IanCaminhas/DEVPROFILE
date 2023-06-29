@@ -8,12 +8,20 @@ import {
   Logo,
   Title,
 } from './styles';
-import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { Button } from '../../components/Form/Button';
 import logo from '../../assets/logo.png';
 import { useForm, FieldValues } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { InputControl } from '../../components/Form/InputControl';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { api } from '../../services/api';
 
 //Estou defindo o tipo que vou usar no const navigation = useNavigation();
 interface ScreenNavigationProp {
@@ -24,6 +32,12 @@ interface IFormInputs {
   [name: string]: any;
 }
 
+const formSchema = yup.object({
+  name: yup.string().required('Informe o nome completo.'),
+  email: yup.string().email('Email inválido').required('Informe o email'),
+  password: yup.string().required('Informe a senha'),
+});
+
 /*
   Antes usava esses inputs do caminho components/input
     <Input placeholder="Nome completo" />
@@ -32,17 +46,43 @@ interface IFormInputs {
 */
 
 export const SignUp: React.FunctionComponent = () => {
-  const { handleSubmit, control } = useForm<FieldValues>();
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    //Estou dizendo para o react hook form que ele vai trabalhar com esse tipo de validação
+    resolver: yupResolver(formSchema),
+  });
 
   const { goBack } = useNavigation<ScreenNavigationProp>();
 
-  const handleSignUp = (form: IFormInputs) => {
+  //pego os dados digitados pelo usuario ja validados
+  //acesso a api e faco o envio dos dados
+  const handleSignUp = async (form: IFormInputs) => {
     const data = {
       name: form.name,
       email: form.email,
-      password: form.passowrd,
+      password: form.password,
     };
-    //console.log(data); para receber no terminal
+    //console.log(data); //para receber no terminal
+
+    try {
+      //fazendo post dos dados na api
+      await api.post('users', data);
+
+      Alert.alert(
+        'Cadastro realizado',
+        'Você já pode fazer login na aplicação',
+      );
+    } catch (error) {
+      console.log(error);
+      //primeiro parametro e um titulo/segundo é uma mensagem
+      Alert.alert(
+        'Erro no cadastrado',
+        'Ocorreu um erro ao fazer o cadastro. Tente novamente.',
+      );
+    }
   };
 
   return (
@@ -66,6 +106,7 @@ export const SignUp: React.FunctionComponent = () => {
               control={control}
               name="name"
               placeholder="Nome completo"
+              error={errors.name && (errors.name.message as string)}
             />
 
             <InputControl
@@ -75,6 +116,7 @@ export const SignUp: React.FunctionComponent = () => {
               name="email"
               placeholder="Email"
               keyboardType="email-address"
+              error={errors.email && (errors.email.message as string)}
             />
             <InputControl
               control={control}
@@ -82,6 +124,7 @@ export const SignUp: React.FunctionComponent = () => {
               placeholder="Senha"
               autoCorrect={false}
               secureTextEntry
+              error={errors.password && (errors.password.message as string)}
             />
             <Button title="Entrar" onPress={handleSubmit(handleSignUp)} />
           </Content>
