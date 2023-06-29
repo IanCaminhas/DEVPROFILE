@@ -2,7 +2,9 @@ import React from 'react';
 
 //O que vai ficar de forma global nesse contexto ?
 interface IAuthContext {
-  name: string;
+  name: string; //nome do usuario
+  signIn(): void; //method de signIn
+
 }
 
 interface IProps {
@@ -16,8 +18,12 @@ export const AuthContext = React.createContext<IAuthContext>(
 );
 
 export const AuthProvider: React.FunctionComponent<IProps> = ({ children }) => {
+  const signIn = () => {
+    console.log('SignIn');
+  }
+  //disponibilizo globalmente o metodo signIn() via AuthProvider
   return (
-    <AuthContext.Provider value={{ name: 'Ian' }}>
+    <AuthContext.Provider value={{ name: 'Ian', signIn }}>
       {children}
     </AuthContext.Provider>
   );

@@ -72,6 +72,13 @@ keyboardShouldPersistTaps="handled":
 */
 export const SignIn: React.FunctionComponent = () => {
   const auth = React.useContext(AuthContext);
+  //o usuario pode clicar várias vezes para entrar e, por consequência, disparar muitas requisições
+  //Se o loading for true, eu vou desabilitar o btn de entrar. Isso quer dizer: usuario deu um click e a requisição foi enviada
+  //Agora, o usuario vai aguardar uma mensagem de retorno(algo acontecer) aparecer para depois ele usar o botão
+  //Vou controlar quantas vezes o usuário clicou. Clicou uma vez, vai ficar desabilitado
+  //enquanto o loading for false, o botao esta liberado... Ninguem clicou nele ainda
+  //Quando loading ficar true, é desabilitado automaticamente
+  const [loading,setLoading] = React.useState(false);
   console.log(auth);
 
   //conrola a submissão dos dados do formulário: handleSubmit
@@ -95,7 +102,10 @@ export const SignIn: React.FunctionComponent = () => {
       email: form.email,
       password: form.passowrd,
     };
-    console.log(data);
+    //console.log(data); apenas para conferência
+    setLoading(true);
+    //metodo do contexto de autenticação
+    auth.signIn();
   };
 
   return (
@@ -131,7 +141,16 @@ export const SignIn: React.FunctionComponent = () => {
               secureTextEntry
               error={errors.password && (errors.password.message as string)}
             />
-            <Button title="Entrar" onPress={() => handleSubmit(handleSignIn)} />
+
+            <Button
+              title="Entrar"
+              disabled={
+                loading ||
+                errors.email ||
+                errors.password /* O botao vai estar desabilitado numa dessas situações*/
+              }
+              onPress={() => handleSubmit(handleSignIn)}
+            />
             <ForgotPasswordButton>
               <ForgotPasswordTitle>Esqueci minha senha</ForgotPasswordTitle>
             </ForgotPasswordButton>
