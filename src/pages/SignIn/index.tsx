@@ -18,6 +18,7 @@ import { useForm, FieldValues } from 'react-hook-form';
 import { InputControl } from '../../components/Form/InputControl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { AuthContext } from '../context/AuthContext';
 
 //Estou defindo o tipo que vou usar no const navigation = useNavigation();
 interface ScreenNavigationProp {
@@ -70,6 +71,9 @@ keyboardShouldPersistTaps="handled":
   Eu tinha feito esse input. Agora estou usando o InputControl
 */
 export const SignIn: React.FunctionComponent = () => {
+  const auth = React.useContext(AuthContext);
+  console.log(auth);
+
   //conrola a submissão dos dados do formulário: handleSubmit
   const {
     handleSubmit,
