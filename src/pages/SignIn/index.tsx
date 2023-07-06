@@ -10,7 +10,13 @@ import {
   CreateAccountTitle,
   Icon,
 } from './styles';
-import { ScrollView, KeyboardAvoidingView, Platform, View } from 'react-native';
+import {
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  View,
+  Alert,
+} from 'react-native';
 import { Button } from '../../components/Form/Button';
 import logo from '../../assets/logo.png';
 import { useNavigation } from '@react-navigation/native';
@@ -40,8 +46,8 @@ interface IFormInputs {
 }
 //dentro de cada validação, posso passar uma mensagem. É opcional
 const formSchema = yup.object({
-  email: yup.string().email('Email inválido.').required('Informe o email.'),
-  password: yup.string().required('Informe a senha.'),
+  email: yup.string().email('Email inválido').required('Informe o email'),
+  password: yup.string().required('Informe a senha'),
 });
 
 /*
@@ -71,15 +77,15 @@ keyboardShouldPersistTaps="handled":
   Eu tinha feito esse input. Agora estou usando o InputControl
 */
 export const SignIn: React.FunctionComponent = () => {
-  const auth = React.useContext(AuthContext);
+  const { signIn } = React.useContext(AuthContext);
   //o usuario pode clicar várias vezes para entrar e, por consequência, disparar muitas requisições
   //Se o loading for true, eu vou desabilitar o btn de entrar. Isso quer dizer: usuario deu um click e a requisição foi enviada
   //Agora, o usuario vai aguardar uma mensagem de retorno(algo acontecer) aparecer para depois ele usar o botão
   //Vou controlar quantas vezes o usuário clicou. Clicou uma vez, vai ficar desabilitado
   //enquanto o loading for false, o botao esta liberado... Ninguem clicou nele ainda
   //Quando loading ficar true, é desabilitado automaticamente
-  const [loading,setLoading] = React.useState(false);
-  console.log(auth);
+  const [loading, setLoading] = React.useState(false);
+  console.log(signIn);
 
   //conrola a submissão dos dados do formulário: handleSubmit
   const {
@@ -100,12 +106,23 @@ export const SignIn: React.FunctionComponent = () => {
   const handleSignIn = (form: IFormInputs) => {
     const data = {
       email: form.email,
-      password: form.passowrd,
+      password: form.password,
     };
     //console.log(data); apenas para conferência
-    setLoading(true);
-    //metodo do contexto de autenticação
-    auth.signIn();
+
+    try {
+      setLoading(true);
+      // SignIn(data); -> esse metodo desestruturado ->  auth.signIn(data);
+      //metodo do contexto de autenticação
+      signIn(data);
+    } catch (error) {
+      // title = 'Erro na autenticação' / message = "Ocorreu um erro ao fazer login, verifique as credenciais"
+      //caso surgir um problema no login
+      Alert.alert(
+        'Erro na autenticação',
+        'Ocorreu um erro ao fazer login, verifique as credenciais',
+      );
+    }
   };
 
   return (
@@ -144,12 +161,8 @@ export const SignIn: React.FunctionComponent = () => {
 
             <Button
               title="Entrar"
-              disabled={
-                loading ||
-                errors.email ||
-                errors.password /* O botao vai estar desabilitado numa dessas situações*/
-              }
-              onPress={() => handleSubmit(handleSignIn)}
+              disabled={loading || errors.email || errors.password}
+              onPress={handleSubmit(handleSignIn)}
             />
             <ForgotPasswordButton>
               <ForgotPasswordTitle>Esqueci minha senha</ForgotPasswordTitle>
