@@ -1,6 +1,14 @@
 import React from 'react';
 import { api } from '../../services/api';
 import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IUser } from '../../model/user';
+
+//aqui estou mantendo as informações da autenticação em memória. Mantenho isso em AsyncStorage
+interface IAuthState {
+  token: string;
+  user: IUser;
+}
 
 //os dados para o login
 interface ICredentials {
@@ -10,7 +18,7 @@ interface ICredentials {
 
 //O que vai ficar de forma global nesse contexto ?
 interface IAuthContext {
-  name: string; //nome do usuario
+  name: IUser; //nome do usuario
   signIn(credentials: ICredentials): void; //method de signIn
 }
 
@@ -24,16 +32,44 @@ export const AuthContext = React.createContext<IAuthContext>(
   {} as IAuthContext,
 );
 
+//Os dados que são manipulados pelo Async storage. token é uma string(não preciso criar uma interface para tipar isso)
+//userData é um objeto que precisa ser tipado(vou criar uma interface pra isso)
+const tokenData = '@DevProfile:token';
+const userData = '@DevProfile:user';
+
 export const AuthProvider: React.FunctionComponent<IProps> = ({ children }) => {
+  const [data, setData] = React.useState<IAuthState>({} as IAuthState);
+  //Quando o componente AuthProvider carregar, buscar as informações da autenticação realizada
+  React.useEffect(() => {
+    async function loadAuthData() {
+      const token = await AsyncStorage.getItem(tokenData);
+      const user = await AsyncStorage.getItem(userData);
+
+      //Caso eu tiver o user autenticado:
+      if (token && user) {
+        setData({ token, user: JSON.parse(user) });
+      }
+    }
+
+    loadAuthData();
+  }, []);
   //estou criando a sessão ao enviar email e senha
   const signIn = async ({ email, password }: ICredentials) => {
     //console.log('SignIn');
     try {
+      //aqui estou autenticado o usuário
       const response = await api.post('sessions', {
         email,
         password,
       });
-      console.log(response.data);
+      //console.log(response.data);
+      //Recebo aqui os dados do usuario ao ter realizado a autenticação
+      const { token, user } = response.data;
+      //Armazeno o token e o user no AsyncStorage
+      await AsyncStorage.setItem(tokenData, token);
+      //AsyncStorage recebe uma string. Por isso o JSON.stringify
+      await AsyncStorage.setItem(userData, JSON.stringify(user));
+      setData({ token, user });
     } catch (error) {
       //throw new Error(error as string);
       Alert.alert(
@@ -42,9 +78,10 @@ export const AuthProvider: React.FunctionComponent<IProps> = ({ children }) => {
       );
     }
   };
-  //disponibilizo globalmente o metodo signIn() via AuthProvider
+  //disponibilizo globalmente o metodo signIn() via AuthProvider. Que no caso é o login
+  //Tbm tenho o user disponivel globalmente -> ser: data.user
   return (
-    <AuthContext.Provider value={{ name: 'Ian', signIn }}>
+    <AuthContext.Provider value={{ user: data.user, signIn }}>
       {children}
     </AuthContext.Provider>
   );
