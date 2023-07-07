@@ -24,7 +24,8 @@ import { useForm, FieldValues } from 'react-hook-form';
 import { InputControl } from '../../components/Form/InputControl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { AuthContext } from '../context/AuthContext';
+//import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 //Estou defindo o tipo que vou usar no const navigation = useNavigation();
 interface ScreenNavigationProp {
@@ -77,7 +78,8 @@ keyboardShouldPersistTaps="handled":
   Eu tinha feito esse input. Agora estou usando o InputControl
 */
 export const SignIn: React.FunctionComponent = () => {
-  const { signIn } = React.useContext(AuthContext);
+  //const { signIn } = React.useContext(AuthContext);
+  const { signIn } = useAuth();
   //o usuario pode clicar várias vezes para entrar e, por consequência, disparar muitas requisições
   //Se o loading for true, eu vou desabilitar o btn de entrar. Isso quer dizer: usuario deu um click e a requisição foi enviada
   //Agora, o usuario vai aguardar uma mensagem de retorno(algo acontecer) aparecer para depois ele usar o botão

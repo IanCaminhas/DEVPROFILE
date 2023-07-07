@@ -86,3 +86,12 @@ export const AuthProvider: React.FunctionComponent<IProps> = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+//Tipo de retorno da função: IAuthContext... Estou retornando um contexto
+export const useAuth = (): IAuthContext => {
+  const context = React.useContext(AuthContext);
+  //caso o hook seja chamado num componente que não esteja envolvido pelo provider. Portanto, preciso inibir.
+  if (!context) {
+    throw new Error('useAuth deve ser usado em um AuthProvider.');
+  }
+};
