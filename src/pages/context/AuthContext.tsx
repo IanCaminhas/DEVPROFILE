@@ -20,6 +20,7 @@ interface ICredentials {
 interface IAuthContext {
   name: IUser; //nome do usuario
   signIn(credentials: ICredentials): void; //method de signIn
+  signOut(): void;
 }
 
 interface IProps {
@@ -78,10 +79,20 @@ export const AuthProvider: React.FunctionComponent<IProps> = ({ children }) => {
       );
     }
   };
+  //Chamo esse method para deslogar o usuario
+  const signOut = async () => {
+    //Ao se deslogar da aplicação, removo as informações do banco de dados local do dispositivo
+    await AsyncStorage.removeItem(tokenData);
+    await AsyncStorage.removeItem(userData);
+    //Apago tudo que estava em memória
+    setData({} as IAuthState);
+  };
+
   //disponibilizo globalmente o metodo signIn() via AuthProvider. Que no caso é o login
   //Tbm tenho o user disponivel globalmente -> ser: data.user
+  //Tbm tenho globalmente o method signOut em qualquer lugar da aplicação.
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn }}>
+    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
