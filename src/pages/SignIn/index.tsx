@@ -102,7 +102,7 @@ export const SignIn: React.FunctionComponent = () => {
     vai para a página específica. Recebe o nome da tela que quero navegar
     navigation.navigate().
   */
-  const navigation = useNavigation<ScreenNavigationProp>();
+  const { navigate } = useNavigation<ScreenNavigationProp>();
 
   //Essa função cria um objeto com as informações recebidas do formulário
   const handleSignIn = (form: IFormInputs) => {
@@ -166,7 +166,7 @@ export const SignIn: React.FunctionComponent = () => {
               disabled={loading || errors.email || errors.password}
               onPress={handleSubmit(handleSignIn)}
             />
-            <ForgotPasswordButton>
+            <ForgotPasswordButton onPress={() => navigate('ForgotPassword')}>
               <ForgotPasswordTitle>Esqueci minha senha</ForgotPasswordTitle>
             </ForgotPasswordButton>
           </Content>
@@ -174,7 +174,7 @@ export const SignIn: React.FunctionComponent = () => {
       </ScrollView>
       <CreateAccount
         onPress={() => {
-          navigation.navigate('SignUp');
+          navigate('SignUp');
         }}
       >
         <Icon name="log-in" />
