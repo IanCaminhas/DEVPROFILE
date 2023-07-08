@@ -18,7 +18,7 @@ interface ICredentials {
 
 //O que vai ficar de forma global nesse contexto ?
 interface IAuthContext {
-  name: IUser; //nome do usuario
+  user: IUser; //nome do usuario
   signIn(credentials: ICredentials): void; //method de signIn
   signOut(): void;
 }
@@ -105,4 +105,5 @@ export const useAuth = (): IAuthContext => {
   if (!context) {
     throw new Error('useAuth deve ser usado em um AuthProvider.');
   }
+  return context;
 };

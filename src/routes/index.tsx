@@ -10,5 +10,5 @@ import { useAuth } from '../pages/context/AuthContext';
 export const Routes: React.FunctionComponent = () => {
   const { user } = useAuth();
   //se o user estiver autenticado(user?.id for true), renderizo o AppRoutes... Se não tiver autenticado, renderizo AuthRoutes(autentica aí ou cria uma nova conta antes de autenticar)
-  return user?.id ? <AuthRoutes /> : <AuthRoutes />;
+  return user?.id ? <AppRoutes /> : <AuthRoutes />;
 };

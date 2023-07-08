@@ -3,6 +3,7 @@ import {
   Container,
   Header,
   Icon,
+  LogoutButton,
   UserAvatar,
   UserAvatarButton,
   UserGretting,
@@ -16,6 +17,7 @@ import {
 //Precisamos definir a tipagem para entender como um módulo. Olhe em src/@types/index.d.ts
 import avatarDefault from '../../assets/avatar02.png';
 import { useAuth } from '../context/AuthContext';
+import { Alert } from 'react-native';
 
 export const Home: React.FunctionComponent = () => {
   /*
@@ -25,7 +27,21 @@ export const Home: React.FunctionComponent = () => {
                 source={user.avatar ? { uri: user.avatar_url } : avatarDefault}
               />
   */
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = () => {
+    Alert.alert('Tem certeza ?', 'Deseja realmente sair da aplicação?', [
+      {
+        text: 'Cancelar',
+        onPress: () => {},
+      },
+      {
+        text: 'Sair',
+        onPress: () => signOut(), //esse signOut foi importado do contexto
+      },
+    ]);
+  };
+
   return (
     <Container>
       <Header>
@@ -33,7 +49,9 @@ export const Home: React.FunctionComponent = () => {
           <UserInfo>
             <UserAvatarButton onPress={() => {}}>
               <UserAvatar
-                source={user.avatar ? { uri: user.avatar_url } : avatarDefault}
+                source={
+                  user.avatar_url ? { uri: user.avatar_url } : avatarDefault
+                }
               />
             </UserAvatarButton>
             <UserInfoDetail>
@@ -41,7 +59,9 @@ export const Home: React.FunctionComponent = () => {
               <UserName>{user.name}</UserName>
             </UserInfoDetail>
           </UserInfo>
-          <Icon name="power" />
+          <LogoutButton onPress={handleSignOut}>
+            <Icon name="power" />
+          </LogoutButton>
         </UserWrapper>
       </Header>
     </Container>

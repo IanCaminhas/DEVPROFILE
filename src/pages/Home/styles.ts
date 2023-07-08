@@ -117,3 +117,6 @@ export const Icon = styled(Feather)`
   font-size: ${RFValue(28)}px;
   color: ${({ theme }) => theme.colors.dark};
 `;
+
+//só queremos o TouchableOpacity definido, pois a estitlização já foi feita em export const Icon
+export const LogoutButton = styled.TouchableOpacity``;
