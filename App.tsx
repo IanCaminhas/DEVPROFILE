@@ -10,6 +10,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { Routes } from './src/routes';
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthProvider } from './src/pages/context/AuthContext';
+import { StatusBar } from 'expo-status-bar';
 
 const App: React.FunctionComponent = () => {
   //Aqui já tenho as duas fontes disponíveis para trabalhar no projeto
@@ -32,6 +33,7 @@ const App: React.FunctionComponent = () => {
   //coloco o <AuthContext.Provider> em torno do <Route />... Assim, qualquer rota vai exigir a autenticação
   return (
     <NavigationContainer>
+      <StatusBar backgroundColor="transparent" translucent />
       <ThemeProvider theme={theme}>
         <AuthProvider>
           <Routes />

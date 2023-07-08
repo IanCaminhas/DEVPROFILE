@@ -60,7 +60,7 @@ export const ForgotPassword: React.FunctionComponent = () => {
         'Você receberá um email com as isntruções para redefinição da senha.',
       );
       //Ou seja, depois que redefinir a senha, vou navegar para a pagina de ResetPassword(digitar o token e a nova senha)
-      navigate('SignIn'); //nome da pagina que quer seguir
+      navigate('ResetPassword'); //nome da pagina que quer seguir
     } catch (error) {
       console.log(error);
       Alert.alert(

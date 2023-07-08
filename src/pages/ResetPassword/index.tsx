@@ -95,7 +95,7 @@ export const ResetPassword: React.FunctionComponent = () => {
               autoCapitalize="none"
               autoCorrect={false}
               control={control}
-              name="tokenn"
+              name="token"
               placeholder="Código"
               error={errors.token && (errors.token.message as string)}
             />
