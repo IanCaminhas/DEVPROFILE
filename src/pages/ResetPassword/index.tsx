@@ -23,6 +23,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { api } from '../../services/api';
 
+//Estou defindo o tipo que vou usar no const navigation = useNavigation();
 interface ScreenNavigationProp {
   goBack: () => void;
   navigate(screen: string): void;
@@ -33,10 +34,14 @@ interface IFormInputs {
 }
 
 const formSchema = yup.object({
-  email: yup.string().email('Email inválido').required('Informe o email'),
+  token: yup.string().uuid('Código inválido').required('Informe o código'),
+  password: yup.string().required('Informe a nova senha'),
+  password_confirmation: yup //password_confirmation tem que ter o mesmo conteúdo de password
+    .string()
+    .oneOf([yup.ref('password'), null], 'Confirmação incorreta'), //ref = vai ser usada como referência o campo password
 });
 
-export const ForgotPassword: React.FunctionComponent = () => {
+export const ResetPassword: React.FunctionComponent = () => {
   const {
     handleSubmit,
     control,
@@ -47,25 +52,26 @@ export const ForgotPassword: React.FunctionComponent = () => {
 
   const { goBack, navigate } = useNavigation<ScreenNavigationProp>();
 
-  const handleForgotPassword = async (form: IFormInputs) => {
+  const handleResetPassword = async (form: IFormInputs) => {
     const data = {
-      email: form.email,
+      token: form.token,
+      password: form.password,
+      password_confirmation: form.password_confirmation,
     };
 
     try {
-      await api.post('password/forgot', data);
+      await api.post('password/reset', data);
 
       Alert.alert(
-        'Email enviado',
-        'Você receberá um email com as isntruções para redefinição da senha.',
+        'Senha redefinida',
+        'A senha foi redefinida com sucesso. Efetue login para acessar',
       );
-      //Ou seja, depois que redefinir a senha, vou navegar para a pagina de ResetPassword(digitar o token e a nova senha)
-      navigate('SignIn'); //nome da pagina que quer seguir
+      navigate('SignIn');
     } catch (error) {
       console.log(error);
       Alert.alert(
-        'Erro no envio de email',
-        'Ocorreu um erro ao enviar o email. Tente novamente.',
+        'Erro ao resetar senha',
+        'Ocorreu um erro ao resetar sua senha. Tente novamente.',
       );
     }
   };
@@ -83,20 +89,40 @@ export const ForgotPassword: React.FunctionComponent = () => {
         <Container>
           <Content>
             <Logo source={logo} />
-            <Title>Crie sua conta</Title>
+            <Title>Redefinir a senha</Title>
 
             <InputControl
               autoCapitalize="none"
               autoCorrect={false}
               control={control}
-              name="email"
-              placeholder="Email"
-              keyboardType="email-address"
-              error={errors.email && (errors.email.message as string)}
+              name="tokenn"
+              placeholder="Código"
+              error={errors.token && (errors.token.message as string)}
+            />
+
+            <InputControl
+              control={control}
+              name="password"
+              placeholder="Senha"
+              autoCorrect={false}
+              secureTextEntry
+              error={errors.password && (errors.password.message as string)}
+            />
+
+             <InputControl
+              control={control}
+              name="password_confirmation"
+              placeholder="Senha"
+              autoCorrect={false}
+              secureTextEntry
+              error={
+                errors.password_confirmation &&
+                (errors.password_confirmation.message as string)
+              }
             />
             <Button
-              title="Enviar"
-              onPress={handleSubmit(handleForgotPassword)}
+              title="Entrar"
+              onPress={handleSubmit(handleResetPassword)}
             />
           </Content>
         </Container>
