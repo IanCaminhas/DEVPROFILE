@@ -18,6 +18,8 @@ import {
 import avatarDefault from '../../assets/avatar02.png';
 import { useAuth } from '../context/AuthContext';
 import { Alert } from 'react-native';
+import { IUser } from '../../model/user';
+import { api } from '../../services/api';
 
 export const Home: React.FunctionComponent = () => {
   /*
@@ -27,7 +29,20 @@ export const Home: React.FunctionComponent = () => {
                 source={user.avatar ? { uri: user.avatar_url } : avatarDefault}
               />
   */
+  const [users, setUsers] = React.useState<IUser[]>([]);
   const { user, signOut } = useAuth();
+  //Quando o componente Home carregar, o próprio componente pega a lista de usuários
+  React.useEffect(() => {
+    const loadUsers = async () => {
+      //Estou pegando os users através da rota users
+      const response = await api.get('users');
+      //Estou pegando as informações de todos os users com axios e armazenando no estado
+      setUsers(response.data);
+    };
+    loadUsers();
+  }, []);
+
+  console.log(users);
 
   const handleSignOut = () => {
     Alert.alert('Tem certeza ?', 'Deseja realmente sair da aplicação?', [

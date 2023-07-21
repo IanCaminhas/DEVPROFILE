@@ -46,9 +46,14 @@ export const AuthProvider: React.FunctionComponent<IProps> = ({ children }) => {
       const token = await AsyncStorage.getItem(tokenData);
       const user = await AsyncStorage.getItem(userData);
 
-      //Caso eu tiver o user autenticado:
+      //Caso tiver o user autenticado: para isso o token e o user precisam estar definidos
       if (token && user) {
         setData({ token, user: JSON.parse(user) });
+        //se tem o token e o user, o usuário está logado.
+        /*O header authorization será preenchido.
+        Garanto que o usuário sempre vai estar com header associado para realizar as requisições.
+        Assim, vai ter condições de acessar os dados da API. */
+        api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       }
     }
 
@@ -70,6 +75,11 @@ export const AuthProvider: React.FunctionComponent<IProps> = ({ children }) => {
       await AsyncStorage.setItem(tokenData, token);
       //AsyncStorage recebe uma string. Por isso o JSON.stringify
       await AsyncStorage.setItem(userData, JSON.stringify(user));
+      /*Permite definir valores padronizados para todas as requisições que vamos usar através do axios.
+      Quando o usuário se autentica, colocamos o token da forma abaixo como a configuração abaixo.
+      Essa configuração já fica válida para todas as requições que esse usuário logado fizer.
+      */
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setData({ token, user });
     } catch (error) {
       //throw new Error(error as string);
