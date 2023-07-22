@@ -4,6 +4,8 @@ Se fosse styled-components web seria 'styled-components
 import styled from 'styled-components/native';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { Feather } from '@expo/vector-icons';
+import { FlatList, FlatListProps } from 'react-native';
+import { IUser } from '../../model/user';
 
 /*estou criando um componente dizendo que ele é igual a uma View. Mas essa View é estilizada pelo styled-components
 No final das contas, um componente vai ser criado
@@ -120,3 +122,36 @@ export const Icon = styled(Feather)`
 
 //só queremos o TouchableOpacity definido, pois a estitlização já foi feita em export const Icon
 export const LogoutButton = styled.TouchableOpacity``;
+
+/*
+Até a realização deste curso, FlatList não tinha sido incorporado no styled-components.
+Foi feito esse código abaixo
+FlatList as new (props: FlatList<IUser>) => FlatList<IUser>)
+Alem de falar que estou trabalhando com FlatList, estou dizendo também com qual tipo
+de informação a FlatList vai trabalhar.
+Estou renderizando a FlatList Padrão para a renderização já com os elementos
+que serão manipulados na lista em si.
+*/
+export const UserList = styled(
+  FlatList as unknown as new (props: FlatList<IUser>) => FlatList<IUser>,
+).attrs({
+  contentContainerStyle: {
+    padding: 24,
+  },
+  showVerticalScrollIndicator: false,
+})``;
+
+export const UserListEmpty = styled.Text`
+  font-size: ${RFValue(18)}px;
+  font-family: ${({ theme }) => theme.fonts.regular};
+  color: ${({ theme }) => theme.colors.gray500};
+`;
+
+//margin-bottom: ${RFValue(8)}px; -> para o titulo que vier abaixo, nao ficar tao proximo
+export const UserListHeader = styled.Text`
+  font-size: ${RFValue(24)}px;
+  font-family: ${({ theme }) => theme.fonts.bold};
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.primary};
+  margin-bottom: ${RFValue(8)}px;
+`;

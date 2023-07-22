@@ -11,6 +11,7 @@ import { Routes } from './src/routes';
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthProvider } from './src/pages/context/AuthContext';
 import { StatusBar } from 'expo-status-bar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const App: React.FunctionComponent = () => {
   //Aqui já tenho as duas fontes disponíveis para trabalhar no projeto
@@ -31,15 +32,18 @@ const App: React.FunctionComponent = () => {
 
   //antes de retornar toda a aplicação, preciso carregar as fontes referentes às instruções acima
   //coloco o <AuthContext.Provider> em torno do <Route />... Assim, qualquer rota vai exigir a autenticação
+  //GestureHandlerRootView vai sempre ocupar 100% de todas as telas
   return (
-    <NavigationContainer>
-      <StatusBar backgroundColor="transparent" translucent />
-      <ThemeProvider theme={theme}>
-        <AuthProvider>
-          <Routes />
-        </AuthProvider>
-      </ThemeProvider>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <StatusBar backgroundColor="transparent" translucent />
+        <ThemeProvider theme={theme}>
+          <AuthProvider>
+            <Routes />
+          </AuthProvider>
+        </ThemeProvider>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 };
 

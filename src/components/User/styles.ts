@@ -1,3 +1,4 @@
+import { RectButton } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
@@ -6,7 +7,7 @@ import styled from 'styled-components/native';
    flex-direction: row; -> os elementos do container vão ficar lado a lado
     margin: 8px 0 -> em cima/em baixo 8px esquerda e direita 0px
 */
-export const Container = styled.TouchableOpacity`
+export const Container = styled(RectButton)`
   width: 100%;
   height: ${RFValue(100)}px;
   background-color: ${({ theme }) => theme.colors.gray800};

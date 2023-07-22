@@ -9,6 +9,9 @@ import {
   UserGretting,
   UserInfo,
   UserInfoDetail,
+  UserList,
+  UserListEmpty,
+  UserListHeader,
   UserName,
   UserWrapper,
 } from './styles';
@@ -20,6 +23,7 @@ import { useAuth } from '../context/AuthContext';
 import { Alert } from 'react-native';
 import { IUser } from '../../model/user';
 import { api } from '../../services/api';
+import { User } from '../../components/User';
 
 export const Home: React.FunctionComponent = () => {
   /*
@@ -28,9 +32,14 @@ export const Home: React.FunctionComponent = () => {
     <UserAvatar
                 source={user.avatar ? { uri: user.avatar_url } : avatarDefault}
               />
+    ListHeaderComponent={<UserListHeader>Usuários</UserListHeader>} header da flatlist
   */
   const [users, setUsers] = React.useState<IUser[]>([]);
   const { user, signOut } = useAuth();
+  /*posso usar isso daqui para substituir o  React.useEffect e o const [users, setUsers] = React.useState<IUser[]>([]);.
+  vou usar isso . Assim, nao preciso usar banco de dados para criar as telas
+  const users: IUser[] = []; */
+
   //Quando o componente Home carregar, o próprio componente pega a lista de usuários
   React.useEffect(() => {
     const loadUsers = async () => {
@@ -42,7 +51,7 @@ export const Home: React.FunctionComponent = () => {
     loadUsers();
   }, []);
 
-  console.log(users);
+  //console.log(users); -> so para visualizar se os users estavam vindo
 
   const handleSignOut = () => {
     Alert.alert('Tem certeza ?', 'Deseja realmente sair da aplicação?', [
@@ -79,6 +88,15 @@ export const Home: React.FunctionComponent = () => {
           </LogoutButton>
         </UserWrapper>
       </Header>
+      <UserList
+        data={users}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => <User data={item} onPress={() => {}} />}
+        ListHeaderComponent={<UserListHeader>Usuários</UserListHeader>}
+        ListEmptyComponent={
+          <UserListEmpty>Ops! Ainda não há registros.</UserListEmpty>
+        }
+      />
     </Container>
   );
 };
