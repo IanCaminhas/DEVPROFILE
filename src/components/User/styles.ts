@@ -6,7 +6,7 @@ import styled from 'styled-components/native';
    flex-direction: row; -> os elementos do container vão ficar lado a lado
     margin: 8px 0 -> em cima/em baixo 8px esquerda e direita 0px
 */
-export const Container = styled.View`
+export const Container = styled.TouchableOpacity`
   width: 100%;
   height: ${RFValue(100)}px;
   background-color: ${({ theme }) => theme.colors.gray800};
