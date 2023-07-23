@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   Container,
   Header,
@@ -25,6 +26,11 @@ import { IUser } from '../../model/user';
 import { api } from '../../services/api';
 import { User } from '../../components/User';
 
+interface ScreenNavigationProp {
+  //screen representa a página para a qual quero ir/params são os parametros que desejo passar para a pagina que estou indo
+  navigate: (screen: string, params?: unknown) => void;
+}
+
 export const Home: React.FunctionComponent = () => {
   /*
     uri é do parâmetro source
@@ -36,6 +42,8 @@ export const Home: React.FunctionComponent = () => {
   */
   const [users, setUsers] = React.useState<IUser[]>([]);
   const { user, signOut } = useAuth();
+  const { navigate } = useNavigation<ScreenNavigationProp>();
+
   /*posso usar isso daqui para substituir o  React.useEffect e o const [users, setUsers] = React.useState<IUser[]>([]);.
   vou usar isso . Assim, nao preciso usar banco de dados para criar as telas
   const users: IUser[] = []; */
@@ -66,6 +74,19 @@ export const Home: React.FunctionComponent = () => {
     ]);
   };
 
+  /* Vou chamar o handleUserDetails pegando o id quando houver o click
+    renderItem={({ item }) => (
+          <User data={item} onPress={() => handleUserDetails(item.id)} />
+        )}
+  */
+
+  const handleUserDetails = (userId: string) => {
+    //A tela para onde eu vou
+    //{ userId } é o objeto que contem as informações que serão repassadas para a tela userDetails
+    //{ userId } -> posso pegar um ou mais parâmetros
+    navigate('UserDetails', { userId });
+  };
+
   return (
     <Container>
       <Header>
@@ -91,7 +112,9 @@ export const Home: React.FunctionComponent = () => {
       <UserList
         data={users}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => <User data={item} onPress={() => {}} />}
+        renderItem={({ item }) => (
+          <User data={item} onPress={() => handleUserDetails(item.id)} />
+        )}
         ListHeaderComponent={<UserListHeader>Usuários</UserListHeader>}
         ListEmptyComponent={
           <UserListEmpty>Ops! Ainda não há registros.</UserListEmpty>
