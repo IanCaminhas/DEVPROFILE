@@ -19,6 +19,8 @@ import {
 } from './styles';
 import { IUser } from '../../model/user';
 import { api } from '../../services/api';
+import avatarDefault from '../../assets/avatar02.png';
+import { useAuth } from '../context/AuthContext';
 
 interface RouteParams {
   userId: string;
@@ -29,6 +31,7 @@ export const UserDetails: React.FunctionComponent = () => {
   const [userDetails, setUserDetails] = React.useState<IUser>({} as IUser);
   const route = useRoute();
   const { userId } = route.params as RouteParams;
+  const { user } = useAuth();
 
   //console.log(route);
   //o proprio eslint destaca a dependência quando ela não está sendo usada:[]
@@ -49,11 +52,19 @@ export const UserDetails: React.FunctionComponent = () => {
           <Icon />
         </GoBackButton>
         <HeaderTitle>Usuários</HeaderTitle>
-        <UserAvatar />
+        <UserAvatar
+          source={user.avatar_url ? { uri: user.avatar_url } : avatarDefault}
+        />
       </Header>
       <Content>
         <ContentTitle>Detalhes do usuário</ContentTitle>
-        <UserDetailAvatar />
+        <UserDetailAvatar
+          source={
+            userDetails.avatar_url
+              ? { uri: userDetails.avatar_url }
+              : avatarDefault
+          }
+        />
         <UserNameDetail>
           <NameTitle>NAME</NameTitle>
           <NameData>{UserDetails.name}</NameData>
