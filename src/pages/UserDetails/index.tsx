@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
   Container,
   Content,
@@ -26,12 +27,18 @@ interface RouteParams {
   userId: string;
 }
 
+interface ScreenNavigationProp {
+  //volta para a tela anterior
+  goBack: () => void;
+}
+
 export const UserDetails: React.FunctionComponent = () => {
   //estado que contem as informações do usuário
   const [userDetails, setUserDetails] = React.useState<IUser>({} as IUser);
   const route = useRoute();
   const { userId } = route.params as RouteParams;
   const { user } = useAuth();
+  const { goBack } = useNavigation<ScreenNavigationProp>();
 
   //console.log(route);
   //o proprio eslint destaca a dependência quando ela não está sendo usada:[]
@@ -45,11 +52,18 @@ export const UserDetails: React.FunctionComponent = () => {
     loadUser();
   }, [userId]);
 
+  /*
+    <GoBackButton>
+          <Icon name="chevron-left" />
+        </GoBackButton>
+        volta para a tela anterior
+  */
+
   return (
     <Container>
       <Header>
-        <GoBackButton>
-          <Icon />
+        <GoBackButton onPress={goBack}>
+          <Icon name="chevron-left" />
         </GoBackButton>
         <HeaderTitle>Usuários</HeaderTitle>
         <UserAvatar
@@ -67,11 +81,11 @@ export const UserDetails: React.FunctionComponent = () => {
         />
         <UserNameDetail>
           <NameTitle>NAME</NameTitle>
-          <NameData>{UserDetails.name}</NameData>
+          <NameData>{userDetails.name}</NameData>
         </UserNameDetail>
         <UserEmailDetail>
           <EmailTitle>EMAIL</EmailTitle>
-          <EmailData>{UserDetails.name}</EmailData>
+          <EmailData>{userDetails.email}</EmailData>
         </UserEmailDetail>
       </Content>
     </Container>
