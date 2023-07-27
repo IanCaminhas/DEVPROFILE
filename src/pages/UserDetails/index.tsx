@@ -1,6 +1,22 @@
 import React from 'react';
 import { useRoute } from '@react-navigation/native';
-import { Container } from './styles';
+import {
+  Container,
+  Content,
+  ContentTitle,
+  EmailData,
+  EmailTitle,
+  GoBackButton,
+  Header,
+  HeaderTitle,
+  Icon,
+  NameData,
+  NameTitle,
+  UserAvatar,
+  UserDetailAvatar,
+  UserEmailDetail,
+  UserNameDetail,
+} from './styles';
 import { IUser } from '../../model/user';
 import { api } from '../../services/api';
 
@@ -26,5 +42,27 @@ export const UserDetails: React.FunctionComponent = () => {
     loadUser();
   }, [userId]);
 
-  return <Container />;
+  return (
+    <Container>
+      <Header>
+        <GoBackButton>
+          <Icon />
+        </GoBackButton>
+        <HeaderTitle>Usuários</HeaderTitle>
+        <UserAvatar />
+      </Header>
+      <Content>
+        <ContentTitle>Detalhes do usuário</ContentTitle>
+        <UserDetailAvatar />
+        <UserNameDetail>
+          <NameTitle>NAME</NameTitle>
+          <NameData>{UserDetails.name}</NameData>
+        </UserNameDetail>
+        <UserEmailDetail>
+          <EmailTitle>EMAIL</EmailTitle>
+          <EmailData>{UserDetails.name}</EmailData>
+        </UserEmailDetail>
+      </Content>
+    </Container>
+  );
 };
