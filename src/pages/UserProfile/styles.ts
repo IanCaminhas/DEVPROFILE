@@ -40,7 +40,7 @@ export const PhotoContainer = styled.View`
   width: ${RFValue(120)}px;
   height: ${RFValue(120)}px;
   border-radius: 10px;
-  margin-left: ${RFValue(48)}px auto;
+  margin: ${RFValue(48)}px auto;
 `;
 
 export const UserAvatar = styled.Image`

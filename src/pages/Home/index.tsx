@@ -62,7 +62,7 @@ export const Home: React.FunctionComponent = () => {
   //console.log(users); -> so para visualizar se os users estavam vindo
 
   const handleSignOut = () => {
-    Alert.alert('Tem certeza ?', 'Deseja realmente sair da aplicação?', [
+    Alert.alert('Tem certeza ?', 'Deseja realmente sair da aplicação ?', [
       {
         text: 'Cancelar',
         onPress: () => {},
