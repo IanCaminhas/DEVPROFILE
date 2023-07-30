@@ -5,10 +5,7 @@ import {
   GoBackButton,
   Header,
   HeaderTitle,
-  HeaderTop,
   Icon,
-  Logo,
-  PhotoContainer,
   Title,
   UserAvatar,
 } from './styles';
@@ -19,7 +16,6 @@ import {
   ScrollView,
 } from 'react-native';
 import { Button } from '../../components/Form/Button';
-import logo from '../../assets/logo.png';
 import { useForm, FieldValues } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
 import { InputControl } from '../../components/Form/InputControl';
@@ -28,6 +24,7 @@ import * as yup from 'yup';
 import { api } from '../../services/api';
 import { useAuth } from '../context/AuthContext';
 import avatarDefault from '../../assets/avatar02.png';
+import { HeaderTop, PhotoContainer } from '../UserProfile/styles';
 
 interface ScreenNavigationProp {
   goBack: () => void;
@@ -50,6 +47,11 @@ export const UserProfileEdit: React.FunctionComponent = () => {
     formState: { errors },
   } = useForm<FieldValues>({
     resolver: yupResolver(formSchema),
+    //nesse metodo, estou informando os valores dos campos para o user editar
+    defaultValues: {
+      name: user.name,
+      email: user.email,
+    },
   });
 
   const { goBack } = useNavigation<ScreenNavigationProp>();
@@ -91,23 +93,17 @@ export const UserProfileEdit: React.FunctionComponent = () => {
       >
         <Container>
           <Header>
-            <HeaderTop>
-              <GoBackButton onPress={goBack}>
-                <Icon name="chevron-left" />
-              </GoBackButton>
-              <HeaderTitle>Seu perfil</HeaderTitle>
-            </HeaderTop>
-            <PhotoContainer>
-              <UserAvatar
-                source={
-                  user.avatar_url ? { uri: user.avatar_url } : avatarDefault
-                }
-              />
-            </PhotoContainer>
+            <GoBackButton onPress={goBack}>
+              <Icon name="chevron-left" />
+            </GoBackButton>
+            <HeaderTitle>Seu perfil</HeaderTitle>
+            <UserAvatar
+              source={
+                user.avatar_url ? { uri: user.avatar_url } : avatarDefault
+              }
+            />
           </Header>
-
           <Content>
-            <Logo source={logo} />
             <Title>Editar dados do perfil</Title>
 
             <InputControl
@@ -128,7 +124,11 @@ export const UserProfileEdit: React.FunctionComponent = () => {
               keyboardType="email-address"
               error={errors.email && (errors.email.message as string)}
             />
-            <Button title="Entrar" onPress={handleSubmit(handleProfileEdit)} />
+            <Button
+              title="Salvar alterações"
+              onPress={handleSubmit(handleProfileEdit)}
+              disabled={!!errors.name || !!errors.email}
+            />
           </Content>
         </Container>
       </ScrollView>

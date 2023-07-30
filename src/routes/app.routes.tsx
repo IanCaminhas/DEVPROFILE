@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Home } from '../pages/Home';
 import { UserDetails } from '../pages/UserDetails';
 import { UserProfile } from '../pages/UserProfile';
+import { UserProfileEdit } from '../pages/UserProfileEdit';
 
 //Objeto que retorna duas propriedades: Screen e Navigator
 //As rotas desse objeto exigem autenticação. São rotas privadas
@@ -26,6 +27,7 @@ export const AppRoutes: React.FunctionComponent = () => {
       <App.Screen name="Home" component={Home} />
       <App.Screen name="UserDetails" component={UserDetails} />
       <App.Screen name="UserProfile" component={UserProfile} />
+      <App.Screen name="UserProfileEdit" component={UserProfileEdit} />
     </App.Navigator>
   );
 };
