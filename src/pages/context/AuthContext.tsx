@@ -21,6 +21,7 @@ interface IAuthContext {
   user: IUser; //nome do usuario
   signIn(credentials: ICredentials): void; //method de signIn
   signOut(): void;
+  updateUser(user: IUser): void;
 }
 
 interface IProps {
@@ -96,6 +97,14 @@ export const AuthProvider: React.FunctionComponent<IProps> = ({ children }) => {
     await AsyncStorage.removeItem(userData);
     //Apago tudo que estava em memória
     setData({} as IAuthState);
+  };
+  //Quando atualizo os dados de perfil do usuário, preciso atualizar os dados dele que estão de forma global
+  const updateUser = async (user: IUser) => {
+    await AsyncStorage.setItem(userData, JSON.stringify(user));
+    setData({
+      user,
+      token: data.token,
+    });
   };
 
   //disponibilizo globalmente o metodo signIn() via AuthProvider. Que no caso é o login
