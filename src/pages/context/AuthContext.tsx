@@ -111,7 +111,9 @@ export const AuthProvider: React.FunctionComponent<IProps> = ({ children }) => {
   //Tbm tenho o user disponivel globalmente -> ser: data.user
   //Tbm tenho globalmente o method signOut em qualquer lugar da aplicação.
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ user: data.user, signIn, signOut, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

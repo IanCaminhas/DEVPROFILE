@@ -57,6 +57,8 @@ export const UserProfilePassword: React.FunctionComponent = () => {
 
   const handleUpdatePassword = async (form: IFormInputs) => {
     const data = {
+      name: user.name,
+      email: user.email,
       old_password: form.old_password,
       password: form.password,
       password_confirmation: form.password_confirmation,
@@ -76,7 +78,7 @@ export const UserProfilePassword: React.FunctionComponent = () => {
       );
     }
   };
-
+  //secureTextEntry -> tudo que for digiado, não ser visível
   return (
     <KeyboardAvoidingView
       enabled
@@ -100,30 +102,51 @@ export const UserProfilePassword: React.FunctionComponent = () => {
             />
           </Header>
           <Content>
-            <Title>Editar dados do perfil</Title>
+            <Title>Alterar senha</Title>
 
             <InputControl
               autoCapitalize="none"
               autoCorrect={false}
               control={control}
-              name="name"
-              placeholder="Nome completo"
-              error={errors.name && (errors.name.message as string)}
+              secureTextEntry
+              name="old_password"
+              placeholder="Senha atual"
+              error={
+                errors.old_password && (errors.old_password.message as string)
+              }
             />
 
             <InputControl
               autoCapitalize="none"
               autoCorrect={false}
               control={control}
-              name="email"
-              placeholder="Email"
-              keyboardType="email-address"
-              error={errors.email && (errors.email.message as string)}
+              secureTextEntry
+              name="password"
+              placeholder="Nova senha"
+              error={errors.password && (errors.password.message as string)}
             />
+
+            <InputControl
+              autoCapitalize="none"
+              autoCorrect={false}
+              control={control}
+              secureTextEntry
+              name="password_confirmation"
+              placeholder="Confirmar senha"
+              error={
+                errors.password_confirmation &&
+                (errors.password_confirmation.message as string)
+              }
+            />
+
             <Button
               title="Salvar alterações"
               onPress={handleSubmit(handleUpdatePassword)}
-              disabled={!!errors.name || !!errors.email}
+              disabled={
+                !!errors.old_password ||
+                !!errors.password ||
+                !!errors.password_confirmation
+              }
             />
           </Content>
         </Container>
